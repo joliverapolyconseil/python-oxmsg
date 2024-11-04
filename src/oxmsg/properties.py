@@ -410,9 +410,22 @@ class String8Property(BaseProperty):
 
         The caller is responsible for determining the encoding and applying it to get a str value.
         """
-        return self._storage.property_stream_bytes(self.pid, self.ptyp).decode(
-            self._body_encoding if self.pid == c.PID_BODY else self._str_prop_encoding
-        )
+        print("[USING FORKED PYTHON OXMSG]")
+        try:
+            return self._storage.property_stream_bytes(self.pid, self.ptyp).decode(
+                self._body_encoding if self.pid == c.PID_BODY else self._str_prop_encoding
+            )
+        except:
+            try:
+                return self._storage.property_stream_bytes(self.pid, self.ptyp).decode(
+                    "cp1252"
+                    # "utf-8"
+                )
+            except:
+                return self._storage.property_stream_bytes(self.pid, self.ptyp).decode(
+                    # "cp1252"
+                    "utf-8"
+                )
 
 
 class TimeProperty(BaseProperty):
